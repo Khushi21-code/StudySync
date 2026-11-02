@@ -1,0 +1,1750 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StudySync - Smart Student Planner</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f6fb;
+            color: #20243a;
+        }
+
+        /* HEADER */
+
+        header {
+            background: white;
+            padding: 17px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e8eaf2;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+
+        .brand {
+            font-size: 23px;
+            font-weight: bold;
+            color: #5146d8;
+        }
+
+        .brand span {
+            color: #20243a;
+        }
+
+        button {
+            border: none;
+            border-radius: 9px;
+            padding: 11px 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .primary {
+            background: #5146d8;
+            color: white;
+        }
+
+        .secondary {
+            background: #eeedff;
+            color: #5146d8;
+        }
+
+        .danger {
+            background: #fff0f0;
+            color: #c33b50;
+        }
+
+        /* MAIN LAYOUT */
+
+        .layout {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            min-height: 100vh;
+        }
+
+        aside {
+            background: white;
+            padding: 25px 15px;
+            border-right: 1px solid #e8eaf2;
+        }
+
+        aside p {
+            color: #999;
+            font-size: 11px;
+            margin: 10px;
+        }
+
+        .nav-button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            color: #686d82;
+            margin: 5px 0;
+        }
+
+        .nav-button:hover,
+        .nav-button.active {
+            background: #eeedff;
+            color: #5146d8;
+        }
+
+        main {
+            padding: 30px;
+            max-width: 1500px;
+            width: 100%;
+            margin: auto;
+        }
+
+        /* DASHBOARD */
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .welcome {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            gap: 15px;
+        }
+
+        h1 {
+            font-size: 27px;
+            margin-bottom: 7px;
+        }
+
+        h2 {
+            font-size: 17px;
+        }
+
+        .muted {
+            color: #85899b;
+            font-size: 14px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #eceef5;
+            border-radius: 14px;
+            padding: 19px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 12px #20243a08;
+        }
+
+        .stat-number {
+            font-size: 29px;
+            font-weight: bold;
+            margin: 12px 0 4px;
+        }
+
+        .stat-label {
+            color: #85899b;
+            font-size: 13px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            gap: 18px;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        /* EVENTS */
+
+        .event {
+            border: 1px solid #eef0f6;
+            border-left: 4px solid #766de8;
+            border-radius: 9px;
+            padding: 13px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .event strong {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .event small {
+            color: #85899b;
+        }
+
+        .tag {
+            display: inline-block;
+            border-radius: 20px;
+            padding: 5px 9px;
+            font-size: 11px;
+            background: #eeedff;
+            color: #5146d8;
+        }
+
+        .tag.exam {
+            background: #fff0e5;
+            color: #c56a22;
+        }
+
+        .tag.class {
+            background: #e8f7f1;
+            color: #21815d;
+        }
+
+        .empty {
+            text-align: center;
+            color: #999;
+            padding: 25px 10px;
+            font-size: 13px;
+        }
+
+        /* PROGRESS BAR */
+
+        .progress {
+            background: #eeeef5;
+            height: 9px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+
+        .progress span {
+            display: block;
+            height: 100%;
+            background: #5146d8;
+            width: 0;
+        }
+
+        /* FORMS */
+
+        .form-card {
+            max-width: 760px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin: 13px 0 7px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            border: 1px solid #e0e2ec;
+            border-radius: 8px;
+            padding: 11px;
+            font: inherit;
+            font-size: 13px;
+        }
+
+        textarea {
+            min-height: 125px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .hint {
+            background: #f4f3ff;
+            border-radius: 9px;
+            padding: 13px;
+            color: #5952a5;
+            font-size: 12px;
+            line-height: 1.7;
+            margin: 13px 0;
+        }
+
+        /* TABLE */
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 500px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            border-bottom: 1px solid #eef0f5;
+            padding: 13px 10px;
+            font-size: 13px;
+        }
+
+        th {
+            color: #85899b;
+            font-size: 11px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        .day {
+            background: #f7f7fc;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 8px 0;
+            font-weight: bold;
+            color: #5146d8;
+        }
+
+        .small-btn {
+            padding: 7px 9px;
+            font-size: 11px;
+        }
+
+        footer {
+            text-align: center;
+            color: #999;
+            font-size: 11px;
+            padding: 25px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        /* MOBILE RESPONSIVE DESIGN */
+
+        @media (max-width: 850px) {
+
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            aside {
+                display: flex;
+                overflow-x: auto;
+                padding: 8px;
+            }
+
+            aside p {
+                display: none;
+            }
+
+            .nav-button {
+                min-width: max-content;
+                width: auto;
+            }
+
+            main {
+                padding: 20px 14px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 580px) {
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            h1 {
+                font-size: 23px;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header>
+
+        <div class="brand">
+            Study<span>Sync</span> ✦
+        </div>
+
+        <div>
+            <button class="secondary" onclick="enableReminders()">
+                🔔 Enable Reminders
+            </button>
+        </div>
+
+    </header>
+
+
+    <div class="layout">
+
+        <!-- SIDEBAR -->
+
+        <aside>
+
+            <p>WORKSPACE</p>
+
+            <button class="nav-button active"
+                data-page="dashboard">
+                ▦ Dashboard
+            </button>
+
+            <button class="nav-button"
+                data-page="timetable">
+                ◷ My Timetable
+            </button>
+
+            <button class="nav-button"
+                data-page="deadlines">
+                ✓ Deadlines & Exams
+            </button>
+
+            <button class="nav-button"
+                data-page="upload">
+                ↑ Upload / Paste
+            </button>
+
+            <button class="nav-button"
+                data-page="add">
+                ＋ Add New Item
+            </button>
+
+        </aside>
+
+
+        <!-- MAIN CONTENT -->
+
+        <main>
+
+            <!-- DASHBOARD -->
+
+            <section id="dashboard" class="page active">
+
+                <div class="welcome">
+
+                    <div>
+                        <h1>Good day, Student! 👋</h1>
+                        <p class="muted" id="todayText">
+                            Here is your academic overview.
+                        </p>
+                    </div>
+
+                    <button class="primary"
+                        onclick="showPage('add')">
+                        + Add a Task
+                    </button>
+
+                </div>
+
+
+                <!-- STATISTICS -->
+
+                <div class="stats">
+
+                    <article class="card">
+
+                        <div class="stat-label">
+                            📚 Classes Today
+                        </div>
+
+                        <div class="stat-number" id="classCount">
+                            0
+                        </div>
+
+                        <div class="stat-label">
+                            Scheduled for today
+                        </div>
+
+                    </article>
+
+
+                    <article class="card">
+
+                        <div class="stat-label">
+                            📝 Pending Tasks
+                        </div>
+
+                        <div class="stat-number" id="taskCount">
+                            0
+                        </div>
+
+                        <div class="stat-label">
+                            Assignments to complete
+                        </div>
+
+                    </article>
+
+
+                    <article class="card">
+
+                        <div class="stat-label">
+                            🎯 Upcoming Exams
+                        </div>
+
+                        <div class="stat-number" id="examCount">
+                            0
+                        </div>
+
+                        <div class="stat-label">
+                            Upcoming examinations
+                        </div>
+
+                    </article>
+
+
+                    <article class="card">
+
+                        <div class="stat-label">
+                            ✅ Completed
+                        </div>
+
+                        <div class="stat-number" id="doneCount">
+                            0
+                        </div>
+
+                        <div class="stat-label">
+                            Tasks completed
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <div class="content-grid">
+
+                    <article class="card">
+
+                        <div class="section-title">
+                            <h2>Today's Classes</h2>
+
+                            <button class="secondary small-btn"
+                                onclick="showPage('timetable')">
+                                View Timetable
+                            </button>
+                        </div>
+
+                        <div id="todayClasses"></div>
+
+                    </article>
+
+
+                    <article class="card">
+
+                        <div class="section-title">
+                            <h2>Upcoming Deadlines</h2>
+
+                            <button class="secondary small-btn"
+                                onclick="showPage('deadlines')">
+                                View All
+                            </button>
+                        </div>
+
+                        <div id="upcomingList"></div>
+
+                    </article>
+
+
+                    <article class="card">
+
+                        <h2>Study Progress</h2>
+
+                        <div class="stat-number"
+                            id="progressText">
+                            0%
+                        </div>
+
+                        <p class="muted">
+                            Your completed tasks
+                        </p>
+
+                        <div class="progress">
+                            <span id="progressBar"></span>
+                        </div>
+
+                        <p class="muted" id="progressNote">
+                            Add tasks to track your progress.
+                        </p>
+
+                    </article>
+
+
+                    <article class="card">
+
+                        <h2>Quick Actions</h2>
+
+                        <p class="muted" style="margin:10px 0 15px">
+                            Organise your academic life.
+                        </p>
+
+                        <button class="primary"
+                            onclick="showPage('upload')">
+                            Upload Timetable
+                        </button>
+
+                        <button class="secondary"
+                            onclick="showPage('add')">
+                            Add Assignment
+                        </button>
+
+                    </article>
+
+                </div>
+
+            </section>
+
+
+            <!-- TIMETABLE PAGE -->
+
+            <section id="timetable" class="page">
+
+                <div class="welcome">
+
+                    <div>
+                        <h1>My Timetable</h1>
+                        <p class="muted">
+                            Your weekly class schedule.
+                        </p>
+                    </div>
+
+                    <button class="primary"
+                        onclick="showPage('add')">
+                        + Add Class
+                    </button>
+
+                </div>
+
+                <div class="card">
+
+                    <div id="timetableList"></div>
+
+                </div>
+
+            </section>
+
+
+            <!-- DEADLINES PAGE -->
+
+            <section id="deadlines" class="page">
+
+                <div class="welcome">
+
+                    <div>
+                        <h1>Deadlines & Exams</h1>
+                        <p class="muted">
+                            Never miss an assignment or examination.
+                        </p>
+                    </div>
+
+                    <button class="primary"
+                        onclick="showPage('add')">
+                        + Add Deadline
+                    </button>
+
+                </div>
+
+                <div class="card table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Type</th>
+                                <th>Title</th>
+                                <th>Subject</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="deadlineRows"></tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- UPLOAD PAGE -->
+
+            <section id="upload" class="page">
+
+                <div class="welcome">
+
+                    <div>
+                        <h1>Import Your Schedule</h1>
+                        <p class="muted">
+                            Upload or paste your timetable and syllabus.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="card form-card">
+
+                    <h2>📤 Upload Timetable File</h2>
+
+                    <p class="muted" style="margin:8px 0">
+                        Choose a TXT or CSV file.
+                    </p>
+
+                    <input type="file"
+                        id="fileInput"
+                        accept=".txt,.csv">
+
+                    <label for="fileInput"
+                        class="upload-label secondary"
+                        style="display:inline-block">
+
+                        Choose File
+
+                    </label>
+
+                    <span id="fileName">
+                        No file selected
+                    </span>
+
+
+                    <hr style="margin:20px 0;border:0;border-top:1px solid #eee">
+
+
+                    <h2>Or Paste Your Timetable</h2>
+
+                    <p class="muted" style="margin:8px 0">
+                        Enter one item per line.
+                    </p>
+
+
+                    <div class="hint">
+
+                        CLASS,Day,Start,End,Subject,Room<br>
+
+                        CLASS,Monday,09:00,10:00,Accounting,Room 12<br><br>
+
+                        TASK,Assignment,Project,2026-11-15<br><br>
+
+                        EXAM,Exam,Company Law,2026-12-02
+
+                    </div>
+
+
+                    <label for="pasteData">
+                        Paste Your Details
+                    </label>
+
+                    <textarea id="pasteData"
+                        placeholder="CLASS,Monday,09:00,10:00,Accounting,Room 12"></textarea>
+
+
+                    <p class="muted" style="margin:8px 0 14px">
+                        This version supports structured text and CSV.
+                    </p>
+                    <button class="primary"
+                        onclick="importText()">
+
+                        Import My Schedule
+
+                    </button>
+
+                    <button class="secondary"
+                        onclick="document.getElementById('pasteData').value=''">
+
+                        Clear
+
+                    </button>
+
+
+                    <p id="importMessage"
+                        class="muted"
+                        style="margin-top:12px">
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ADD NEW ITEM PAGE -->
+
+            <section id="add" class="page">
+
+                <div class="welcome">
+
+                    <div>
+                        <h1>Add New Item</h1>
+                        <p class="muted">
+                            Add classes, assignments and exams.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="card form-card">
+
+                    <form id="itemForm">
+
+                        <label for="itemType">
+                            Select Type
+                        </label>
+
+                        <select id="itemType">
+
+                            <option value="Assignment">
+                                Assignment
+                            </option>
+
+                            <option value="Exam">
+                                Exam / Test
+                            </option>
+
+                            <option value="Class">
+                                Class
+                            </option>
+
+                        </select>
+
+
+                        <label for="itemTitle">
+                            Title / Subject Name
+                        </label>
+
+                        <input type="text"
+                            id="itemTitle"
+                            placeholder="Corporate Accounting"
+                            required>
+
+
+                        <div class="form-row">
+
+                            <div>
+
+                                <label for="itemDate">
+                                    Date
+                                </label>
+
+                                <input type="date"
+                                    id="itemDate"
+                                    required>
+
+                            </div>
+
+
+                            <div>
+
+                                <label for="itemSubject">
+                                    Subject / Room
+                                </label>
+
+                                <input type="text"
+                                    id="itemSubject"
+                                    placeholder="Room 12">
+
+                            </div>
+
+                        </div>
+
+
+                        <div id="classFields"
+                            style="display:none">
+
+                            <div class="form-row">
+
+                                <div>
+
+                                    <label for="classDay">
+                                        Day
+                                    </label>
+
+                                    <select id="classDay">
+
+                                        <option>Monday</option>
+                                        <option>Tuesday</option>
+                                        <option>Wednesday</option>
+                                        <option>Thursday</option>
+                                        <option>Friday</option>
+                                        <option>Saturday</option>
+                                        <option>Sunday</option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div>
+
+                                    <label for="startTime">
+                                        Start Time
+                                    </label>
+
+                                    <input type="time"
+                                        id="startTime"
+                                        value="09:00">
+
+                                </div>
+
+                            </div>
+
+
+                            <label for="endTime">
+                                End Time
+                            </label>
+
+                            <input type="time"
+                                id="endTime"
+                                value="10:00">
+
+                        </div>
+
+
+                        <label for="itemNotes">
+                            Notes
+                        </label>
+
+                        <textarea id="itemNotes"
+                            placeholder="Enter additional details..."></textarea>
+
+
+                        <br><br>
+
+                        <button class="primary"
+                            type="submit">
+
+                            Save Item
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </section>
+
+
+            <footer>
+                StudySync - Your Personal Academic Planner
+            </footer>
+
+        </main>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        // LOAD SAVED DATA
+
+        let classes = JSON.parse(
+            localStorage.getItem("studyClasses")
+        ) || [];
+
+        let tasks = JSON.parse(
+            localStorage.getItem("studyTasks")
+        ) || [];
+
+
+        // SAVE DATA
+
+        function saveData() {
+
+            localStorage.setItem(
+                "studyClasses",
+                JSON.stringify(classes)
+            );
+
+            localStorage.setItem(
+                "studyTasks",
+                JSON.stringify(tasks)
+            );
+
+        }
+
+
+        // CHANGE PAGES
+
+        function showPage(pageName) {
+
+            document.querySelectorAll(".page")
+                .forEach(page => {
+                    page.classList.remove("active");
+                });
+
+            document.querySelectorAll(".nav-button")
+                .forEach(button => {
+                    button.classList.remove("active");
+                });
+
+            document.getElementById(pageName)
+                .classList.add("active");
+
+            const selectedButton = document.querySelector(
+                '[data-page="' + pageName + '"]'
+            );
+
+            if (selectedButton) {
+                selectedButton.classList.add("active");
+            }
+
+            renderAll();
+
+        }
+
+
+        // SIDEBAR BUTTONS
+
+        document.querySelectorAll(".nav-button")
+            .forEach(button => {
+
+                button.addEventListener("click", function() {
+
+                    showPage(this.dataset.page);
+
+                });
+
+            });
+
+
+        // GET TODAY'S DATE
+
+        function todayDate() {
+
+            const now = new Date();
+
+            const year = now.getFullYear();
+
+            const month = String(
+                now.getMonth() + 1
+            ).padStart(2, "0");
+
+            const day = String(
+                now.getDate()
+            ).padStart(2, "0");
+
+            return year + "-" + month + "-" + day;
+
+        }
+
+
+        // FORMAT DATE
+
+        function formatDate(dateString) {
+
+            if (!dateString) return "";
+
+            return new Date(
+                dateString + "T00:00:00"
+            ).toLocaleDateString("en-IN", {
+
+                day: "numeric",
+                month: "short",
+                year: "numeric"
+
+            });
+
+        }
+
+
+        // DISPLAY ALL WEBSITE DATA
+
+        function renderAll() {
+
+            const today = todayDate();
+
+            const dayName = new Date()
+                .toLocaleDateString("en-US", {
+                    weekday: "long"
+                });
+
+
+            document.getElementById("todayText")
+                .textContent = new Date()
+                .toLocaleDateString("en-IN", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric"
+                });
+
+
+            // TODAY'S CLASSES
+
+            const todaysClasses = classes
+                .filter(item => item.day === dayName)
+                .sort((a, b) =>
+                    a.start.localeCompare(b.start)
+                );
+
+
+            document.getElementById("classCount")
+                .textContent = todaysClasses.length;
+
+
+            // PENDING TASKS
+
+            document.getElementById("taskCount")
+                .textContent = tasks.filter(item =>
+                    item.type === "Assignment" && !item.done
+                ).length;
+
+
+            // UPCOMING EXAMS
+
+            document.getElementById("examCount")
+                .textContent = tasks.filter(item =>
+                    item.type === "Exam" &&
+                    !item.done &&
+                    item.date >= today
+                ).length;
+
+
+            // COMPLETED TASKS
+
+            document.getElementById("doneCount")
+                .textContent = tasks.filter(item =>
+                    item.done
+                ).length;
+
+
+            // SHOW TODAY'S CLASSES
+
+            document.getElementById("todayClasses")
+                .innerHTML = todaysClasses.length
+
+                ? todaysClasses.map(item =>
+
+                    '<div class="event">' +
+
+                    '<div><strong>' +
+                    safe(item.title) +
+                    '</strong><small>' +
+
+                    safe(item.start) +
+                    ' - ' +
+                    safe(item.end) +
+
+                    ' · ' +
+                    safe(item.room || "No room") +
+
+                    '</small></div>' +
+
+                    '<span class="tag class">Class</span>' +
+
+                    '</div>'
+
+                ).join("")
+
+                : '<div class="empty">No classes scheduled for today.</div>';
+
+
+            // UPCOMING DEADLINES
+
+            const upcoming = tasks
+
+                .filter(item =>
+                    !item.done && item.date >= today
+                )
+
+                .sort((a, b) =>
+                    a.date.localeCompare(b.date)
+                )
+
+                .slice(0, 5);
+
+
+            document.getElementById("upcomingList")
+                .innerHTML = upcoming.length
+
+                ? upcoming.map(item =>
+
+                    '<div class="event">' +
+
+                    '<div><strong>' +
+                    safe(item.title) +
+                    '</strong><small>' +
+
+                    formatDate(item.date) +
+
+                    '</small></div>' +
+
+                    '<span class="tag ' +
+                    (item.type === "Exam" ? "exam" : "") +
+                    '">' +
+
+                    safe(item.type) +
+
+                    '</span></div>'
+
+                ).join("")
+
+                : '<div class="empty">No upcoming deadlines.</div>';
+
+
+            // PROGRESS TRACKER
+
+            const total = tasks.length;
+
+            const completed = tasks.filter(item =>
+                item.done
+            ).length;
+
+            const percentage = total
+                ? Math.round(completed / total * 100)
+                : 0;
+
+
+            document.getElementById("progressText")
+                .textContent = percentage + "%";
+
+            document.getElementById("progressBar")
+                .style.width = percentage + "%";
+
+            document.getElementById("progressNote")
+                .textContent = total
+                ? completed + " of " + total + " tasks completed."
+                : "Add tasks to track your progress.";
+
+
+            // WEEKLY TIMETABLE
+
+            const week = [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday"
+            ];
+
+
+            document.getElementById("timetableList")
+                .innerHTML = week.map(day => {
+
+                    const dayClasses = classes
+
+                        .filter(item => item.day === day)
+
+                        .sort((a, b) =>
+                            a.start.localeCompare(b.start)
+                        );
+
+
+                    return '<div class="day">' +
+                        day +
+                        '</div>' +
+
+                        (dayClasses.length
+
+                            ? dayClasses.map(item =>
+
+                                '<div class="event">' +
+
+                                '<div><strong>' +
+                                safe(item.title) +
+                                '</strong><small>' +
+
+                                safe(item.start) +
+                                ' - ' +
+                                safe(item.end) +
+
+                                ' · ' +
+                                safe(item.room || "Room not added") +
+
+                                '</small></div>' +
+
+                                '<button class="danger small-btn" ' +
+                                'onclick="deleteClass(' +
+                                item.id +
+                                ')">Remove</button>' +
+
+                                '</div>'
+
+                            ).join("")
+
+                            : '<div class="empty">No classes scheduled.</div>');
+
+                }).join("");
+
+
+            // DEADLINES TABLE
+
+            const sortedTasks = [...tasks].sort(
+                (a, b) => a.date.localeCompare(b.date)
+            );
+
+
+            document.getElementById("deadlineRows")
+                .innerHTML = sortedTasks.length
+
+                ? sortedTasks.map(item =>
+
+                    '<tr>' +
+
+                    '<td><span class="tag ' +
+                    (item.type === "Exam" ? "exam" : "") +
+                    '">' +
+
+                    safe(item.type) +
+
+                    '</span></td>' +
+
+                    '<td><strong>' +
+                    safe(item.title) +
+                    '</strong></td>' +
+
+                    '<td>' +
+                    safe(item.subject || "-") +
+                    '</td>' +
+
+                    '<td>' +
+                    formatDate(item.date) +
+                    '</td>' +
+
+                    '<td>' +
+                    (item.done ? "Completed" : "Pending") +
+                    '</td>' +
+
+                    '<td>' +
+
+                    (item.done
+
+                        ? '<button class="secondary small-btn" onclick="toggleDone(' +
+                          item.id +
+                          ')">Undo</button>'
+
+                        : '<button class="primary small-btn" onclick="toggleDone(' +
+                          item.id +
+                          ')">Complete</button>') +
+
+                    ' <button class="danger small-btn" onclick="deleteTask(' +
+                    item.id +
+                    ')">Delete</button>' +
+
+                    '</td></tr>'
+
+                ).join("")
+
+                : '<tr><td colspan="6" class="empty">No deadlines added yet.</td></tr>';
+
+        }
+
+
+        // SAFETY: DISPLAY USER TEXT AS TEXT
+
+        function safe(value) {
+
+            return String(value || "").replace(
+                /[&<>"']/g,
+
+                character => ({
+
+                    "&": "&amp;",
+                    "<": "&lt;",
+                    ">": "&gt;",
+                    '"': "&quot;",
+                    "'": "&#39;"
+
+                }[character])
+
+            );
+
+        }
+
+
+        // DELETE CLASS
+
+        function deleteClass(id) {
+
+            classes = classes.filter(
+                item => item.id !== id
+            );
+
+            saveData();
+
+            renderAll();
+
+        }
+
+
+        // DELETE TASK
+
+        function deleteTask(id) {
+
+            tasks = tasks.filter(
+                item => item.id !== id
+            );
+
+            saveData();
+
+            renderAll();
+
+        }
+
+
+        // MARK TASK COMPLETED
+
+        function toggleDone(id) {
+
+            const task = tasks.find(
+                item => item.id === id
+            );
+
+            if (task) {
+                task.done = !task.done;
+            }
+
+            saveData();
+
+            renderAll();
+
+        }
+
+
+        // SHOW CLASS TIME FIELDS
+
+        document.getElementById("itemType")
+            .addEventListener("change", function() {
+
+                document.getElementById("classFields")
+                    .style.display =
+                    this.value === "Class" ? "block" : "none";
+
+            });
+
+
+        // ADD NEW CLASS OR TASK
+
+        document.getElementById("itemForm")
+            .addEventListener("submit", function(event) {
+
+                event.preventDefault();
+
+                const type = document.getElementById("itemType").value;
+
+                const title = document.getElementById("itemTitle")
+                    .value.trim();
+
+                const date = document.getElementById("itemDate").value;
+
+                const subject = document.getElementById("itemSubject")
+                    .value.trim();
+
+
+                if (type === "Class") {
+
+                    classes.push({
+
+                        id: Date.now(),
+
+                        title: title,
+
+                        day: document.getElementById("classDay").value,
+
+                        start: document.getElementById("startTime").value,
+
+                        end: document.getElementById("endTime").value,
+
+                        room: subject
+
+                    });
+
+                }
+
+                else {
+
+                    tasks.push({
+
+                        id: Date.now(),
+
+                        type: type,
+
+                        title: title,
+
+                        date: date,
+
+                        subject: subject,
+
+                        notes: document.getElementById("itemNotes").value,
+
+                        done: false
+
+                    });
+
+                }
+
+
+                saveData();
+
+                this.reset();
+
+                document.getElementById("classFields")
+                    .style.display = "none";
+
+                showPage(
+                    type === "Class" ? "timetable" : "deadlines"
+                );
+
+            });
+
+
+        // IMPORT TIMETABLE TEXT
+
+        function importText() {
+
+            const text = document.getElementById("pasteData")
+                .value.trim();
+
+            if (!text) {
+
+                document.getElementById("importMessage")
+                    .textContent = "Please paste some timetable details first.";
+
+                return;
+
+            }
+
+
+            let added = 0;
+
+
+            text.split(/\r?\n/).forEach(line => {
+
+                const parts = line.split(",").map(
+                    value => value.trim()
+                );
+
+                const type = (parts[0] || "").toUpperCase();
+
+
+                if (type === "CLASS" && parts.length >= 6) {
+
+                    const validDays = [
+                        "Monday", "Tuesday", "Wednesday",
+                        "Thursday", "Friday", "Saturday", "Sunday"
+                    ];
+
+                    if (!validDays.includes(parts[1])) return;
+
+                    if (!/^\d{2}:\d{2}$/.test(parts[2]) ||
+                        !/^\d{2}:\d{2}$/.test(parts[3])) return;
+
+                    classes.push({
+
+                        id: Date.now() + Math.random(),
+
+                        day: parts[1],
+
+                        start: parts[2],
+
+                        end: parts[3],
+
+                        title: parts[4],
+
+                        room: parts[5]
+
+                    });
+
+                    added++;
+
+                }
+
+                else if (
+                    (type === "TASK" || type === "EXAM") &&
+                    parts.length >= 4
+                ) {
+
+                    if (!/^\d{4}-\d{2}-\d{2}$/.test(parts[3])) return;
+
+                    tasks.push({
+
+                        id: Date.now() + Math.random(),
+
+                        type: type === "EXAM"
+                            ? "Exam"
+                            : (parts[1] || "Assignment"),
+
+                        title: parts[2],
+
+                        date: parts[3],
+
+                        subject: "",
+
+                        done: false
+
+                    });
+
+                    added++;
+
+                }
+
+            });
+
+
+            saveData();
+
+            renderAll();
+
+
+            document.getElementById("importMessage")
+                .textContent =
+                added + " item(s) imported successfully!";
+
+        }
+
+
+        // UPLOAD TXT OR CSV FILE
+
+        document.getElementById("fileInput")
+            .addEventListener("change", function() {
+
+                const file = this.files[0];
+
+                if (!file) return;
+
+                document.getElementById("fileName")
+                    .textContent = file.name;
+
+
+                const reader = new FileReader();
+
+
+                reader.onload = function(event) {
+
+                    document.getElementById("pasteData")
+                        .value = event.target.result;
+
+                    document.getElementById("importMessage")
+                        .textContent =
+                        "File loaded. Click Import My Schedule.";
+
+                };
+
+
+                reader.readAsText(file);
+
+            });
+
+
+        // ENABLE BROWSER NOTIFICATIONS
+
+        async function enableReminders() {
+
+            if (!("Notification" in window)) {
+
+                alert("Your browser does not support notifications.");
+
+                return;
+
+            }
+
+
+            const permission =
+                await Notification.requestPermission();
+
+
+            if (permission === "granted") {
+
+                new Notification(
+                    "StudySync Reminders Enabled",
+                    {
+                        body: "You will receive deadline reminders while the website is open."
+                    }
+                );
+
+                alert("Reminders enabled successfully!");
+            }
+            else {
+              alert("Please allow notifications in browser settings.");
+            }
+        }
+
+        // CHECK TODAY'S DEADLINES
+
+        function checkReminders() {
+
+            if (
+                !("Notification" in window) ||
+                Notification.permission !== "granted"
+            ) {
+                return;
+            }
+            const today = todayDate();
+            tasks.filter(item =>
+                !item.done && item.date === today
+            ).forEach(item => {
+                const key = "reminded_" + item.id + "_" + today;
+                if (!sessionStorage.getItem(key)) {
+                    new Notification(
+                        "Deadline Today: " + item.title,
+                        {
+                            body: "Complete your " +
+                                item.type.toLowerCase() +
+                                " today!"
+                        }
+                    );
+                    sessionStorage.setItem(key, "yes");
+
+                }
+            });
+        }
+
+        // INITIALISE WEBSITE
+        renderAll();
+        checkReminders();
+        // CHECK AGAIN EVERY 30 MINUTES
+        setInterval(
+            checkReminders,
+            30 * 60 * 1000
+        );
+    </script>
+</body>
+</html>
